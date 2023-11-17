@@ -17,4 +17,6 @@ router.post(
   ]),
   productController.adminAddNew
 );
+router.post('/update/:id', productController.adminPutUpdate);
+
 module.exports = router;

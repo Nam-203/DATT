@@ -9,8 +9,6 @@ const { slugify } = require('../../utils/slugify');
 const { getS3ResponsenEntity } = require('../../utils/getS3ReponseEntity');
 const qs = require('querystring');
 class ProductController {
- 
-
   // Admin router
   async adminGetList(req, res) {
     try {
@@ -60,6 +58,98 @@ class ProductController {
     res
       .status(200)
       .render('template/product/productAdd', { message: '', category, brand });
+  }
+
+  async adminAddNew(req, res) {
+    let {
+      category,
+      brand,
+      discount,
+      flashsale,
+      flashsale_end_date,
+      name,
+      slug,
+      specs,
+      content,
+      price_option,
+      color_option,
+      amount,
+    } = req.body;
+
+    if (!slug) {
+      slug = slugify(name);
+    }
+    if (flashsale === 'on') {
+      flashsale = true;
+    } else {
+      flashsale = false;
+    }
+
+    const option = price_option.reduce((prev, _, index, arr) => {
+      if (index % 2 === 0 || index === 0) {
+        if (!(arr[index] || arr[index + 1])) {
+          return prev;
+        }
+        const newObj = {
+          price: parseInt(arr[index].split(',').join('')),
+          value: arr[index + 1],
+        };
+        return [...prev, newObj];
+      }
+      return prev;
+    }, []);
+
+    const color = color_option.reduce((prev, curr) => {
+      if (curr) {
+        return [...prev, { name: curr }];
+      }
+      return prev;
+    }, []);
+
+    const specification = specs.reduce((prev, curr, index, arr) => {
+      return [...prev, [SPECS_KEYS[index], curr]];
+    }, []);
+    const thumbnail = getS3ResponsenEntity({ ...req.files['thumbnail'][0] });
+    const banner_image = getS3ResponsenEntity({ ...req.files['banner'][0] });
+    const product_image = req.files['product-image'].map((entity) =>
+      getS3ResponsenEntity(entity)
+    );
+
+    const product = new ProductModel({
+      name,
+      option,
+      color,
+      discount,
+      flash_sale: flashsale,
+      flashsale_end_date: Date.now(),
+      thumbnail,
+      product_image,
+      banner_image,
+      specification,
+      article: content,
+      slug,
+      amount,
+      category,
+      brand,
+    });
+
+    const categoryData = await CategoryModel.find();
+    const brandData = await BrandModal.find();
+
+    try {
+      await ProductModel.create(product);
+      return res.status(200).render('template/product/productAdd', {
+        message: 'Thêm sản phẩm thành công',
+        category: categoryData,
+        brand: brandData,
+      });
+    } catch (error) {
+      return res.status(505).render('template/product/productAdd', {
+        message: 'Thêm sản phẩm thất bại',
+        category: categoryData,
+        brand: brandData,
+      });
+    }
   }
 }
 

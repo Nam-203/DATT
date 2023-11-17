@@ -61,6 +61,32 @@ class ProductController {
       .status(200)
       .render('template/product/productAdd', { message: '', category, brand });
   }
+  async adminGetUpdate(req, res) {
+    const { id } = req.query;
+    if (!id) {
+      return res.redirect('/product-manager/list');
+    }
+    try {
+      const product = await ProductModel.findById(id).populate([
+        { path: 'category' },
+        { path: 'brand' },
+      ]);
+      console.log(
+        '🚀 ~ file: controller.product.js ~ line 216 ~ ProductController ~ adminGetUpdate ~ product',
+        product
+      );
+      const brand = await BrandModal.find();
+      const category = await CategoryModel.find();
+      res.status(200).render('template/product/productEdit', {
+        message: '',
+        product,
+        brand,
+        category,
+      });
+    } catch (error) {
+      res.status(300).redirect('product-manager/list');
+    }
+  }
 }
 
 module.exports = new ProductController();

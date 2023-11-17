@@ -6,6 +6,7 @@ const { uploadS3 } = require('../../middlewares/upload-aws-s3');
 // GET
 router.get('/list', productController.adminGetList);
 router.get('/add', productController.adminGetAdd);
+router.get('/edit', productController.adminGetUpdate);
 
 // POST
 router.post(

@@ -61,6 +61,15 @@ class ProductController {
       .status(200)
       .render('template/product/productAdd', { message: '', category, brand });
   }
+  async adminDeleteOne(req, res) {
+    const { id } = req.params;
+    try {
+      await ProductModel.deleteOne({ _id: id });
+      res.redirect('/product-manager/list');
+    } catch (error) {
+      res.redirect('/product-manager/list');
+    }
+  }
   async adminGetUpdate(req, res) {
     const { id } = req.query;
     if (!id) {

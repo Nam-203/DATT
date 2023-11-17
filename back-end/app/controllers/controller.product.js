@@ -53,7 +53,14 @@ class ProductController {
       res.status(400).json({ error: 'error' });
     }
   }
+  async adminGetAdd(req, res) {
+    const category = await CategoryModel.find();
+    const brand = await BrandModal.find();
 
+    res
+      .status(200)
+      .render('template/product/productAdd', { message: '', category, brand });
+  }
 }
 
 module.exports = new ProductController();

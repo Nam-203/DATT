@@ -8,6 +8,53 @@ import axios from "axios";
 import { axiosClient } from "../../../access/api/axios-client";
 
 export const Search = () => {
+  const [filterData, setFilterData] = useState([]);
+  const [message, setMessage] = useState(undefined);
+  const [filterMessage, setFilterMessage] = useState("");
+  const { register, handleSubmit } = useForm();
+
+  useEffect(() => {
+    const handleOuterClick = ({ target }) => {
+      if (target.className !== "header-search-data") {
+        setMessage(undefined);
+        setFilterMessage("");
+        setFilterData([]);
+      }
+    };
+    if (filterData.length > 0 || message) {
+      window.addEventListener("click", handleOuterClick);
+    }
+    return () => {
+      window.removeEventListener("click", handleOuterClick);
+    };
+  }, [filterData, message]);
+
+  const onSearchFormSubmit = async (data) => {
+    const productQuery = data.search;
+    if (!productQuery) {
+      setFilterData([]);
+      setMessage(undefined);
+      return;
+    }
+    const { data: filter } = await axiosClient.get(
+      "/product/search/" + productQuery
+    );
+    if (filter.length > 0) {
+      setFilterData(filter);
+      setFilterMessage(productQuery);
+      setMessage(undefined);
+    } else {
+      setFilterData([]);
+      setMessage("Not found");
+      setFilterMessage("");
+    }
+  };
+
+  const handleCloseModal = () => {
+    setMessage(undefined);
+    setFilterMessage("");
+    setFilterData([]);
+  };
   return (
     <section className="header-search-wrap">
       <div className="header-search">

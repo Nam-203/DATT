@@ -6,6 +6,8 @@ const { uploadS3 } = require('../../middlewares/upload-aws-s3');
 // GET
 router.get('/list', productController.adminGetList);
 router.get('/add', productController.adminGetAdd);
+router.get('/edit', productController.adminGetUpdate);
+router.get('/delete/:id', productController.adminDeleteOne);
 
 // POST
 router.post(
@@ -18,5 +20,9 @@ router.post(
   productController.adminAddNew
 );
 router.post('/update/:id', productController.adminPutUpdate);
+
+// PUT
+// DELETE
+// router.delete('/:id', productController.adminDeleteOne);
 
 module.exports = router;

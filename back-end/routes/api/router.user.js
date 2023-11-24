@@ -1,6 +1,11 @@
 const Router = require('express').Router();
+<<<<<<< HEAD
 const authController = require('../../app/controllers/controller.user');
 const userController = require('../../app/controllers/controller.user');
+=======
+const authController = require('../../../../../../Downloads/Duanbe_CODEGOC/Duanbe_CODEGOC/app/controllers/controller.user');
+const userController = require('../../../../../../Downloads/Duanbe_CODEGOC/Duanbe_CODEGOC/app/controllers/controller.user');
+>>>>>>> 21a9291ca4077a9d96c81bef9b48de1de1048f24
 
 Router.post('/login', authController.login);
 Router.post('/register', authController.register);

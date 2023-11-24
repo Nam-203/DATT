@@ -9,6 +9,7 @@ const { slugify } = require('../../utils/slugify');
 const { getS3ResponsenEntity } = require('../../utils/getS3ReponseEntity');
 const qs = require('querystring');
 class ProductController {
+<<<<<<< HEAD
   // API route
   async apiGetList(req, res) {
     try {
@@ -113,6 +114,8 @@ class ProductController {
     }
   }
 
+=======
+>>>>>>> 21a9291ca4077a9d96c81bef9b48de1de1048f24
   // Admin router
   async adminGetList(req, res) {
     try {
@@ -337,6 +340,7 @@ class ProductController {
     const specification = specs.reduce((prev, curr, index, arr) => {
       return [...prev, [SPECS_KEYS[index], curr]];
     }, []);
+<<<<<<< HEAD
     // const thumbnail =
     //   getS3ResponsenEntity({ ...req.files['thumbnail'][0] }) || null;
     // const banner_image =
@@ -400,6 +404,41 @@ class ProductController {
     req.json(products) 
     } catch (error) {
       res.status(400).json({message: 'khong tim thay san pham'})
+=======
+    const product = {
+      name,
+      discount,
+      flash_sale: flashsale,
+      article: content,
+      slug,
+      amount,
+      category,
+      brand,
+      option,
+      color,
+      specification,
+    };
+    try {
+      await ProductModel.updateOne({ _id: id }, product);
+      res.status(200).redirect('/product-manager/list?page=1&limit=10');
+    } catch (error) {
+      res.status(200).redirect('/product-manager/list?page=1&limit=10');
+    }
+  }
+
+  async searchProduct(req, res) {
+    try {
+      const keyword = req.query.keyword;
+      const products = await ProductModel.find({
+        $or: [
+          { name: { $regex: keyword, $options: 'i' } }, // Tìm theo tên sản phẩm (không phân biệt hoa thường)
+          { description: { $regex: keyword, $options: 'i' } }, // Tìm theo mô tả sản phẩm (không phân biệt hoa thường)
+        ],
+      });
+      req.json(products);
+    } catch (error) {
+      res.status(400).json({ message: 'khong tim thay san pham' });
+>>>>>>> 21a9291ca4077a9d96c81bef9b48de1de1048f24
     }
   }
 }

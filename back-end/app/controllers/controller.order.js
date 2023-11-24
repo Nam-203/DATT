@@ -98,6 +98,7 @@ class OrderController {
       next(error);
     }
   };
+<<<<<<< HEAD
 //   updateOrderById = async (req, res, next) => {
 //     try {
 //         if (req.headers['authorization']) {
@@ -139,6 +140,8 @@ class OrderController {
 //         next(error);
 //     }
 // };
+=======
+>>>>>>> 21a9291ca4077a9d96c81bef9b48de1de1048f24
 
 // [GET] api/store/:id
   GetOderById  = async (req, res, next) => {
@@ -172,6 +175,7 @@ class OrderController {
       next(error);
     }
   }
+<<<<<<< HEAD
   // updateOrderById  = async (req, res, next) => {
   //   try {
   //     //console.log(req.headers);
@@ -202,6 +206,8 @@ class OrderController {
   //   }
   // };
 
+=======
+>>>>>>> 21a9291ca4077a9d96c81bef9b48de1de1048f24
 
   deleteOrderById  = async (req, res, next) => {
     try {

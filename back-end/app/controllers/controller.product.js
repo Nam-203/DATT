@@ -9,6 +9,111 @@ const { slugify } = require('../../utils/slugify');
 const { getS3ResponsenEntity } = require('../../utils/getS3ReponseEntity');
 const qs = require('querystring');
 class ProductController {
+  // API route
+  async apiGetList(req, res) {
+    try {
+      //Truy cập và lấy các tham số từ yêu cầu (request) như page, limit, category, sort.
+      const { page = 1, limit = 10, category, sort } = req.query;
+      //Tính tổng số hàng dữ liệu (totalRows) dựa trên giá trị của category.
+      // Nếu category tồn tại, sẽ
+      //đếm số lượng sản phẩm có category tương ứng; nếu không,
+      //sẽ đếm tất cả sản phẩm.
+      const totalRows = category
+        ? await ProductModel.find({ ...(category && { category }) }).count()
+        : await ProductModel.count();
+
+      //Tính số trang tối đa (totalPages) dựa trên tổng số hàng và giới hạn số lượng hàng trên mỗi trang (limit).
+      const totalPages = Math.ceil(totalRows / limit);
+
+      const filter = {
+        ...(category && { category }),
+      };
+      console.log(sort && { view: sort });
+      const products = await ProductModel.find(filter)
+        .populate([
+          {
+            path: 'category',
+          },
+          {
+            path: 'brand',
+          },
+        ])
+        .skip(Number.parseInt(page * limit - limit))
+        .limit(Number.parseInt(limit))
+        .sort({ ...(sort && { view: sort }) });
+
+      if (products.length > 0) {
+        return res
+          .status(200)
+          .json({ paginate: { totalRows, page, limit, totalPages }, products });
+      } else {
+        return res.status(400).json({
+          paginate: { totalRows, page, limit, totalPages },
+          message: 'Not found!',
+        });
+      }
+    } catch (error) {
+      res.status(400).json({ error });
+    }
+  }
+  async apiGetOne(req, res) {
+    const { id } = req.params;
+    if (!id) return;
+
+    try {
+      const product = await ProductModel.findById(id);
+      const comments = await CommentModel.find({ product: id }).populate([
+        { path: 'user', select: 'firstName lastName email image' },
+        { path: 'replyComment' },
+      ]);
+      res.status(200).json({ status: true, product, comments });
+    } catch (error) {
+      res.status(400).json({ status: false, error });
+    }
+  }
+  async apiViewUpdate(req, res) {
+    const { id } = req.params;
+    if (id !== undefined) {
+      try {
+        const { view } = await ProductModel.findById(id).select('view');
+        const statusView = await ProductModel.updateOne(
+          { _id: id },
+          { view: parseInt(view + 1) }
+        );
+        res.status(200).json(statusView);
+      } catch (error) {
+        res.status(404).json(error);
+      }
+    }
+  }
+  async apiSearch(req, res) {
+    const { q } = req.params; //ìm kiếm các sản phẩm có tên chứa giá trị của q
+    try {
+      const productSearch = await ProductModel.find({
+        //tìm kiếm tất cả các bản ghi trong bảng
+        name: { $regex: q, $options: 'i' }, // ProductModel mà trường name chứa giá trị của q
+      });
+      res.json(productSearch); // trả về dữ liệu đã tìm kiếm
+    } catch (error) {
+      res.status(400).json(error); //nếu không tim thấy sẽ trả về trạng thái và lỗi
+    }
+  }
+  async apiFilter(req, res) {
+    try {
+      const query = req.query;
+      if (query.sort !== undefined) {
+        const product = await ProductModel.find({
+          category: query.category,
+        }).sort(query.sort);
+        return res.status(200).json(product);
+      }
+      const product = await ProductModel.find(query);
+      return res.status(200).json(product);
+    } catch (error) {
+      return res.status(400).json(error);
+    }
+  }
+
   // Admin router
   async adminGetList(req, res) {
     try {
@@ -233,6 +338,36 @@ class ProductController {
     const specification = specs.reduce((prev, curr, index, arr) => {
       return [...prev, [SPECS_KEYS[index], curr]];
     }, []);
+    // const thumbnail =
+    //   getS3ResponsenEntity({ ...req.files['thumbnail'][0] }) || null;
+    // const banner_image =
+    //   getS3ResponsenEntity({ ...req.files['banner'][0] }) || null;
+    // const product_image =
+    //   req.files['product-image']?.map((entity) =>
+    //     getS3ResponsenEntity(entity)
+    //   ) || null;
+
+    //   const product = {
+    //     name,
+    //     discount,
+    //     flash_sale: flashsale,
+    //     article: content,
+    //     slug,
+    //     amount,
+    //     category,
+    //     brand,
+    //     option,
+    //     color,
+    //     specification,
+    //   };
+    //   try {
+    //     await ProductModel.update({ _id: id }, product);
+    //     res.status(200).redirect('/product-manager/list?page=1&limit=10');
+    //   } catch (error) {
+    //     res.status(200).redirect('/product-manager/list?page=1&limit=10');
+    //   }
+    // }
+
     const product = {
       name,
       discount,

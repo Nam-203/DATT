@@ -18,6 +18,8 @@ import "./index.scss";
 import { ToastContainer } from "react-toastify/dist";
 import "react-toastify/dist/ReactToastify.css";
 import Menu from "./page/menu";
+import 'bootstrap/dist/css/bootstrap-grid.css';
+// import 'bootstrap/dist/css/bootstrap.min.css';
 SwiperCore.use([Navigation, Thumbs, Autoplay]);
 
 const App = () => {

@@ -14,5 +14,6 @@ export const NavItem = ({ path, name }) => {
         <div className="name">{name}</div>
       </NavLink>
     </NavbarUI>
+    // hello
   );
 };

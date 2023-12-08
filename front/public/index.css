@@ -1,0 +1,84 @@
+a {
+  text-decoration: none;
+}
+
+.bar_wpp {
+  position: fixed;
+  bottom: 5px;
+  right: 70px;
+  z-index: 120;
+  border-radius: 5px 5px 0px 0px;
+  overflow: hidden;
+}
+
+.bar_wpp a {
+  display: flex;
+  align-items: stretch;
+  justify-content: space-between;
+}
+
+.bar_wpp .icon_wpp i {
+  color: #ffffff;
+  font-size: 20px;
+}
+
+.bar_wpp .icon_wpp {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: #0c7619;
+  text-align: center;
+  -webkit-transition: 0.3s;
+  -o-transition: 0.3s;
+  transition: 0.3s;
+  border-radius: 100%;
+  width: 40px;
+  height: 40px;
+  float: left;
+  z-index: 2;
+}
+
+.bar_wpp .txt_wpp {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  background-color: #0e3f14;
+  color: #ffffff;
+  padding: 0px 5px;
+  font-family: Verdana, Geneva, sans-serif;
+  font-size: 14px;
+  font-weight: bold;
+  -webkit-transition: 0.3s;
+  -o-transition: 0.3s;
+  transition: 0.3s;
+  padding-right: 11px;
+  padding-left: 45px !important;
+  margin-left: -35px;
+  z-index: 1;
+  border-radius: 50px;
+}
+
+.bar_wpp a:hover {
+  text-decoration: none !important;
+}
+.bar_wpp a:hover .icon_wpp {
+  background-color: #0e3f14;
+}
+.bar_wpp a:hover .txt_wpp {
+  background-color: #0c7619;
+}
+
+@media (max-width: 475px) {
+  .bar_wpp {
+    right: auto;
+    left: 5px;
+    bottom: 15px;
+  }
+  .bar_wpp .icon_wpp i {
+    font-size: 25px;
+  }
+  .bar_wpp .txt_wpp {
+    display: none;
+  }
+}

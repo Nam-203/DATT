@@ -722,17 +722,17 @@ export const Mock_products = [
   },
 ];
 
-// export const CATEGORIES = [
-//   ["may-loc-nuoc", "656059f0df4687c9d1d2045e"],
-//   ["may-hut-bui", "65605a04df4687c9d1d20462"],
-//   ["may-loc-khong-khi", "65605a5bdf4687c9d1d2046f"],
-// ];
-
 export const CATEGORIES = [
-  ["dien-thoai", "6482e83f95ff7b6c37b1fb0d"],
-  ["lap-top", "648be8b778ce4c63c73d8f1a"],
-  ["may-tinh-bang", "648c28f3f0ddc98137ea3d38"],
+  ["may-loc-nuoc", "656059f0df4687c9d1d2045e"],
+  ["may-hut-bui", "65605a04df4687c9d1d20462"],
+  ["noi-com-dien", "65605aefdf4687c9d1d2047d"],
 ];
+
+// export const CATEGORIES = [
+//   ["dien-thoai", "6482e83f95ff7b6c37b1fb0d"],
+//   ["lap-top", "648be8b778ce4c63c73d8f1a"],
+//   ["may-tinh-bang", "648c28f3f0ddc98137ea3d38"],
+// ];
 export const API = {
   PRODUCT: "https://thegioitech-be.herokuapp.com/api",
   DEVELOP: "https://dry-scrubland-53766-6591284259f6.herokuapp.com/api",
